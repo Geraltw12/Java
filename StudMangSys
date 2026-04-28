@@ -1,0 +1,178 @@
+import java.util.*;
+
+// Student Class
+class Student {
+    private int id;
+    private String name;
+    private double cgpa;   // changed from marks
+    private String phone;  // new field
+
+    public Student(int id, String name, double cgpa, String phone) {
+        this.id = id;
+        this.name = name;
+        this.cgpa = cgpa;
+        this.phone = phone;
+    }
+
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public double getCgpa() { return cgpa; }
+    public String getPhone() { return phone; }
+
+    public void setName(String name) { this.name = name; }
+    public void setCgpa(double cgpa) { this.cgpa = cgpa; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public void display() {
+        System.out.println("--------------------------------");
+        System.out.println("ID    : " + id);
+        System.out.println("Name  : " + name);
+        System.out.println("CGPA  : " + cgpa);
+        System.out.println("Phone : " + phone);
+    }
+}
+
+// Service Class
+class StudentService {
+    private ArrayList<Student> list = new ArrayList<>();
+
+    // Add
+    public void addStudent(int id, String name, double cgpa, String phone) {
+        list.add(new Student(id, name, cgpa, phone));
+        System.out.println("✅ Student Added Successfully!");
+    }
+
+    // Display
+    public void displayStudents() {
+        if (list.isEmpty()) {
+            System.out.println("❌ No Students Found!");
+            return;
+        }
+        for (Student s : list) {
+            s.display();
+        }
+    }
+
+    // Search
+    public Student searchStudent(int id) {
+        for (Student s : list) {
+            if (s.getId() == id) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    // Update
+    public void updateStudent(int id, String name, double cgpa, String phone) {
+        Student s = searchStudent(id);
+        if (s != null) {
+            s.setName(name);
+            s.setCgpa(cgpa);
+            s.setPhone(phone);
+            System.out.println("🔄 Student Updated Successfully!");
+        } else {
+            System.out.println("❌ Student Not Found!");
+        }
+    }
+
+    // Delete
+    public void deleteStudent(int id) {
+        Student s = searchStudent(id);
+        if (s != null) {
+            list.remove(s);
+            System.out.println("🗑️ Student Deleted Successfully!");
+        } else {
+            System.out.println("❌ Student Not Found!");
+        }
+    }
+}
+
+// Main Class
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        StudentService service = new StudentService();
+
+        while (true) {
+            System.out.println("\n===== 🎓 Student Management System =====");
+            System.out.println("1. Add Student");
+            System.out.println("2. Display Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Update Student");
+            System.out.println("5. Delete Student");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter CGPA: ");
+                    double cgpa = sc.nextDouble();
+                    sc.nextLine();
+
+                    System.out.print("Enter Phone: ");
+                    String phone = sc.nextLine();
+
+                    service.addStudent(id, name, cgpa, phone);
+                    break;
+
+                case 2:
+                    service.displayStudents();
+                    break;
+
+                case 3:
+                    System.out.print("Enter ID to search: ");
+                    int sid = sc.nextInt();
+
+                    Student s = service.searchStudent(sid);
+                    if (s != null)
+                        s.display();
+                    else
+                        System.out.println("❌ Student Not Found!");
+                    break;
+
+                case 4:
+                    System.out.print("Enter ID to update: ");
+                    int uid = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter New Name: ");
+                    String newName = sc.nextLine();
+
+                    System.out.print("Enter New CGPA: ");
+                    double newCgpa = sc.nextDouble();
+                    sc.nextLine();
+
+                    System.out.print("Enter New Phone: ");
+                    String newPhone = sc.nextLine();
+
+                    service.updateStudent(uid, newName, newCgpa, newPhone);
+                    break;
+
+                case 5:
+                    System.out.print("Enter ID to delete: ");
+                    int did = sc.nextInt();
+                    service.deleteStudent(did);
+                    break;
+
+                case 6:
+                    System.out.println("🙏 Thank You!");
+                    return;
+
+                default:
+                    System.out.println("⚠️ Invalid Choice!");
+            }
+        }
+    }
+}
